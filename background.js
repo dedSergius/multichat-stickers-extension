@@ -1,5 +1,4 @@
-
-chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(async (message, sender) => {
     if (message.action === "sendYoutubeChatMessage") {
         await chrome.scripting.executeScript({
             target: { tabId: sender.tab?.id },

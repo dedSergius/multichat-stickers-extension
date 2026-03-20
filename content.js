@@ -3,58 +3,26 @@ const icon = `<svg data-v-cae7544b="" fill="none" stroke-width="0" xmlns="http:/
                 <path d="M44 24L24 4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>`
 const url = window.location.href
-let hasUpdate = false
 let stickers = []
 
 function injectStickerContainer() {
+    if (document.getElementById('misaka-sticker-container')) {
+        return
+    }
+    const emojiPicker = url.includes('youtube.com') ? document.querySelector('#emoji-picker-button') : document.querySelector('[data-a-target="emote-picker-button"]')
+    if (!emojiPicker) {
+        setTimeout(injectStickerContainer, 800)
+        return
+    }
+    const stickerContainer = document.createElement('div')
+    stickerContainer.id = 'misaka-sticker-container'
+
     if (url.includes('youtube.com')) {
-        return injectStickerContainerYoutube()
+        emojiPicker.parentElement.insertBefore(stickerContainer, emojiPicker)
     } else if (url.includes('twitch.tv')) {
-        return injectStickerContainerTwitch()
+        emojiPicker.parentElement.parentElement.parentElement.insertBefore(stickerContainer, emojiPicker.parentElement.parentElement)
+        emojiPicker.parentElement.parentElement.parentElement.style.display = 'flex'
     }
-}
-
-function injectStickerContainerYoutube() {
-    if (document.getElementById('misaka-sticker-container')) {
-        return
-    }
-
-    const emojiPicker = document.querySelector(
-        '#emoji-picker-button'
-    )
-
-    if (!emojiPicker) {
-        setTimeout(injectStickerContainerYoutube, 800)
-        return
-    }
-
-    const stickerContainer = document.createElement('div')
-    stickerContainer.id = 'misaka-sticker-container'
-
-    emojiPicker.parentElement.insertBefore(stickerContainer, emojiPicker)
-    injectStickerButton(stickerContainer)
-    injectStickerPicker(stickerContainer)
-}
-
-function injectStickerContainerTwitch() {
-    if (document.getElementById('misaka-sticker-container')) {
-        return
-    }
-
-    const emojiPicker = document.querySelector(
-        '[data-a-target="emote-picker-button"]'
-    )
-
-    if (!emojiPicker) {
-        setTimeout(injectStickerContainerTwitch, 800)
-        return
-    }
-
-    const stickerContainer = document.createElement('div')
-    stickerContainer.id = 'misaka-sticker-container'
-
-    emojiPicker.parentElement.parentElement.parentElement.insertBefore(stickerContainer, emojiPicker.parentElement.parentElement)
-    emojiPicker.parentElement.parentElement.parentElement.style.display = 'flex'
     injectStickerButton(stickerContainer)
     injectStickerPicker(stickerContainer)
 }
@@ -106,7 +74,7 @@ async function injectStickerPicker(container) {
     if (stickers.length == 0) {
         pickerContainer.innerHTML = '<div style="text-align:center; padding:40px 0;">Пусто</div>'
     } else {
-        let html = `${await checkUpdate() ? '<div style="text-align:center; padding:40px 0;"><a href="https://misakamibot.ru/multichat/files/multichat-stickers-extension.crx" target="_blank">Обновите расширение</a></div>' : ''}<br/><div class="misaka-stiker-list">`
+        let html = `${await checkUpdate() ? '<div style="text-align:center; padding:40px 0;"><a href="https://misakamibot.ru/multichat/files/multichat-stickers-extension.crx" target="_blank">Обновите расширение</a></div><br/>' : ''}<div class="misaka-stiker-list">`
         for (let i = 0; i < stickers.length; i++) {
             const sticker = stickers[i]
             const url = 'https://misakamibot.ru/multichat/stickers/assets/' + sticker.id + '.' + sticker.metadata.ext
@@ -177,24 +145,32 @@ function renderStickerInMessages(messages) {
 }
 
 async function checkUpdate() {
-    const currentVersion = chrome.runtime.getVersion()
-    const response = await fetch('https://raw.githubusercontent.com/dedSergius/multichat-stickers-extension/refs/heads/main/manifest.json')
-    if (!response.ok || response.status !== 200) {
-        return null
-    }
-    const latestVersion = (await response.json()).version
-    if (!latestVersion) {
-        return null
-    }
-
-    const cSeparated = currentVersion.split('.')
-    const lSeparated = latestVersion.split('.')
-    for (let i = 0; i < lSeparated.length; i++) {
-        if (cSeparated[i] && Number.parseInt(cSeparated[i]) < Number.parseInt(lSeparated[i])) {
-            return true
+    try {
+        const currentVersion = chrome.runtime.getVersion()
+        const response = await fetch('https://raw.githubusercontent.com/dedSergius/multichat-stickers-extension/refs/heads/main/manifest.json')
+        if (!response.ok || response.status !== 200) {
+            return null
         }
+        const latestVersion = (await response.json()).version
+        if (!latestVersion) {
+            return null
+        }
+
+        const cSeparated = currentVersion.split('.')
+        const lSeparated = latestVersion.split('.')
+        for (let i = 0; i < lSeparated.length; i++) {
+            if (!cSeparated[i]) {
+                return true
+            }
+            if (cSeparated[i] && Number.parseInt(cSeparated[i]) < Number.parseInt(lSeparated[i])) {
+                return true
+            }
+        }
+        return false
+    } catch (error) {
+        console.error(error)
+        return null
     }
-    return false
 }
 
 const observer = new MutationObserver(() => {
@@ -209,7 +185,7 @@ const observer = new MutationObserver(() => {
             messages = document.querySelectorAll('.text-fragment[data-a-target="chat-message-text"]')
         }
         renderStickerInMessages(messages)
-    }, 2000)
+    }, 800)
 })
 
 observer.observe(document.body, { childList: true, subtree: true })
