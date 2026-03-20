@@ -1,3 +1,4 @@
+
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     if (message.action === "sendYoutubeChatMessage") {
         await chrome.scripting.executeScript({
@@ -19,8 +20,9 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 })
 
 async function sendYoutubeChatMessage(message) {
-    const input = document.querySelector('yt-live-chat-text-input-field-renderer')
-    const chat = document.querySelector('yt-live-chat-message-input-renderer')
+    const container = document.querySelector('.ytd-live-chat-frame') ? document.querySelector('.ytd-live-chat-frame').contentDocument : document
+    const input = container.querySelector('yt-live-chat-text-input-field-renderer')
+    const chat = container.querySelector('yt-live-chat-message-input-renderer')
     
     if (!input || !chat) return
 

@@ -3,6 +3,7 @@ const icon = `<svg data-v-cae7544b="" fill="none" stroke-width="0" xmlns="http:/
                 <path d="M44 24L24 4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>`
 const url = window.location.href
+let hasUpdate = false
 let stickers = []
 
 function injectStickerContainer() {
@@ -105,7 +106,7 @@ async function injectStickerPicker(container) {
     if (stickers.length == 0) {
         pickerContainer.innerHTML = '<div style="text-align:center; padding:40px 0;">Пусто</div>'
     } else {
-        let html = '<div class="misaka-stiker-list">'
+        let html = `${await checkUpdate() ? '<div style="text-align:center; padding:40px 0;"><a href="https://misakamibot.ru/multichat/files/multichat-stickers-extension.crx" target="_blank">Обновите расширение</a></div>' : ''}<br/><div class="misaka-stiker-list">`
         for (let i = 0; i < stickers.length; i++) {
             const sticker = stickers[i]
             const url = 'https://misakamibot.ru/multichat/stickers/assets/' + sticker.id + '.' + sticker.metadata.ext
@@ -173,6 +174,27 @@ function renderStickerInMessages(messages) {
             message.innerHTML = html
         }
     })
+}
+
+async function checkUpdate() {
+    const currentVersion = chrome.runtime.getVersion()
+    const response = await fetch('https://raw.githubusercontent.com/dedSergius/multichat-stickers-extension/refs/heads/main/manifest.json')
+    if (!response.ok || response.status !== 200) {
+        return null
+    }
+    const latestVersion = (await response.json()).version
+    if (!latestVersion) {
+        return null
+    }
+
+    const cSeparated = currentVersion.split('.')
+    const lSeparated = latestVersion.split('.')
+    for (let i = 0; i < lSeparated.length; i++) {
+        if (cSeparated[i] && cSeparated[i] < lSeparated[i]) {
+            return true
+        }
+    }
+    return false
 }
 
 const observer = new MutationObserver(() => {
