@@ -190,7 +190,7 @@ async function checkUpdate() {
     const cSeparated = currentVersion.split('.')
     const lSeparated = latestVersion.split('.')
     for (let i = 0; i < lSeparated.length; i++) {
-        if (cSeparated[i] && cSeparated[i] < lSeparated[i]) {
+        if (cSeparated[i] && Number.parseInt(cSeparated[i]) < Number.parseInt(lSeparated[i])) {
             return true
         }
     }
