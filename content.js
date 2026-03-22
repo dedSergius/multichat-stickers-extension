@@ -33,16 +33,6 @@ function injectStickerButton(container) {
     stickerBtn.innerHTML = icon
     stickerBtn.title = 'Стикеры мультичата'
     stickerBtn.style.cssText = `
-        margin-left: 8px;
-        width: 36px;
-        height: 36px;
-        font-size: 20px;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         stroke: ${window.location.href.includes('youtube.com') ? 'var(--yt-live-chat-primary-text-color)' : 'var(--color-fill-button-icon)'};
     `
 
@@ -52,21 +42,6 @@ function injectStickerButton(container) {
 async function injectStickerPicker(container) {
     const pickerContainer = document.createElement('div')
     pickerContainer.id = 'misaka-sticker-picker'
-    pickerContainer.style.cssText = `
-        display: none;
-        position: absolute;
-        inset: auto 10px 60px auto;
-        width: 375px;
-        height: 240px;
-        background: #222;
-        border: 1px solid #444;
-        border-radius: 8px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-        z-index: 10000;
-        color: white;
-        padding: 12px;
-        overflow-y: auto;
-    `
 
     const response = await fetch('https://misakamibot.ru/api/multichat/stickers')
     stickers = await response.json()
