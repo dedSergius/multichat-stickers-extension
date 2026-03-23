@@ -101,7 +101,7 @@ function renderStickerInMessages(messages) {
         const text = url.includes('twitch.tv') ? message.innerHTML : message.innerHTML.replace(/<[^>]*\balt\s*=\s*["']([^"']*)["'][^>]*>|<[^>]+>/g, (match, altValue) => altValue || '').replace(/(:.*:)/g, '').trim()
         if (/^stk/i.test(text)) {
             const tag = text.replace(/^stk\s*/i, '').trim()
-            const sticker = stickers.find(s => s.metadata.tag == tag)
+            const sticker = stickers.find(s => s.originalTag == tag)
             if (!sticker) {
                 return
             }
