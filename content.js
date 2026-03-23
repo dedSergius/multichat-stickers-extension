@@ -49,7 +49,7 @@ async function injectStickerPicker(container) {
     if (stickers.length == 0) {
         pickerContainer.innerHTML = '<div style="text-align:center; padding:40px 0;">Пусто</div>'
     } else {
-        let html = `${await checkUpdate() ? '<div style="text-align:center; padding:40px 0;"><a href="https://misakamibot.ru/multichat/files/multichat-stickers-extension.crx" target="_blank">Обновите расширение</a></div><br/>' : ''}<div class="misaka-stiker-list">`
+        let html = `${await checkUpdate() ? '<a class="misaka-extension-update" href="https://misakamibot.ru/multichat/files/multichat-stickers-extension.crx" target="_blank">Обновите расширение</a><br/>' : ''}<div class="misaka-stiker-list">`
         for (let i = 0; i < stickers.length; i++) {
             const sticker = stickers[i]
             const url = 'https://misakamibot.ru/multichat/stickers/assets/' + sticker.id + '.' + sticker.ext
