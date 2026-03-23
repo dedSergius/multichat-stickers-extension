@@ -52,13 +52,13 @@ async function injectStickerPicker(container) {
         let html = `${await checkUpdate() ? '<div style="text-align:center; padding:40px 0;"><a href="https://misakamibot.ru/multichat/files/multichat-stickers-extension.crx" target="_blank">Обновите расширение</a></div><br/>' : ''}<div class="misaka-stiker-list">`
         for (let i = 0; i < stickers.length; i++) {
             const sticker = stickers[i]
-            const url = 'https://misakamibot.ru/multichat/stickers/assets/' + sticker.id + '.' + sticker.metadata.ext
-            if (sticker.metadata.ext == 'webm') {
-                html += `<div class="misaka-sticker-sticker" data-tag="${sticker.metadata.tag}"><video autoplay loop playsinline muted><source src="${url}" type="video/webm" /></video><p>${sticker.metadata.tag}</p></div>`
-            } else if (sticker.metadata.ext == 'tgs') {
-                html += `<div class="misaka-sticker-sticker" data-tag="${sticker.metadata.tag}"><iframe src="https://misakamibot.ru/multichat/sticker-embed.html?id=${sticker.id}&ext=tgs"></iframe><p>${sticker.metadata.tag}</p></div>`
+            const url = 'https://misakamibot.ru/multichat/stickers/assets/' + sticker.id + '.' + sticker.ext
+            if (sticker.ext == 'webm') {
+                html += `<div class="misaka-sticker-sticker" data-tag="${sticker.originalTag}"><video autoplay loop playsinline muted><source src="${url}" type="video/webm" /></video><p>${sticker.originalTag}</p></div>`
+            } else if (sticker.ext == 'tgs') {
+                html += `<div class="misaka-sticker-sticker" data-tag="${sticker.originalTag}"><iframe src="https://misakamibot.ru/multichat/sticker-embed.html?id=${sticker.id}&ext=tgs"></iframe><p>${sticker.originalTag}</p></div>`
             } else {
-                html += `<div class="misaka-sticker-sticker" data-tag="${sticker.metadata.tag}"><img src="${url}" alt="${sticker.metadata.tag}"><p>${sticker.metadata.tag}</p></div>`
+                html += `<div class="misaka-sticker-sticker" data-tag="${sticker.originalTag}"><img src="${url}" alt="${sticker.originalTag}"><p>${sticker.originalTag}</p></div>`
             }
         }
         pickerContainer.innerHTML += html + '</div>'
@@ -105,14 +105,14 @@ function renderStickerInMessages(messages) {
             if (!sticker) {
                 return
             }
-            const url = 'https://misakamibot.ru/multichat/stickers/assets/' + sticker.id + '.' + sticker.metadata.ext
+            const url = 'https://misakamibot.ru/multichat/stickers/assets/' + sticker.id + '.' + sticker.ext
             let html = ''
-            if (sticker.metadata.ext == 'webm') {
-                html += `<div class="misaka-sticker-sticker" data-tag="${sticker.metadata.tag}"><video autoplay loop playsinline muted><source src="${url}" type="video/webm" /></video></div>`
-            } else if (sticker.metadata.ext == 'tgs') {
-                html += `<div class="misaka-sticker-sticker" data-tag="${sticker.metadata.tag}"><iframe src="https://misakamibot.ru/multichat/sticker-embed.html?id=${sticker.id}&ext=tgs"></iframe></div>`
+            if (sticker.ext == 'webm') {
+                html += `<div class="misaka-sticker-sticker" data-tag="${sticker.originalTag}"><video autoplay loop playsinline muted><source src="${url}" type="video/webm" /></video></div>`
+            } else if (sticker.ext == 'tgs') {
+                html += `<div class="misaka-sticker-sticker" data-tag="${sticker.originalTag}"><iframe src="https://misakamibot.ru/multichat/sticker-embed.html?id=${sticker.id}&ext=tgs"></iframe></div>`
             } else {
-                html += `<div class="misaka-sticker-sticker" data-tag="${sticker.metadata.tag}"><img src="${url}" alt="${sticker.metadata.tag}"></div>`
+                html += `<div class="misaka-sticker-sticker" data-tag="${sticker.originalTag}"><img src="${url}" alt="${sticker.originalTag}"></div>`
             }
             message.innerHTML = html
         }

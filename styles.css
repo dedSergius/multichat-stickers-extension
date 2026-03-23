@@ -1,6 +1,6 @@
-@import 'https: //fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap';
+@import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap');
 
-.misaka-sticker-btn {
+#misaka-sticker-btn {
     margin-left: 8px;
     width: 36px;
     height: 36px;
@@ -13,7 +13,7 @@
     justify-content: center;
 }
 
-.misaka-sticker-picker {
+#misaka-sticker-picker {
     display: none;
     position: absolute;
     inset: auto 10px 60px auto;
