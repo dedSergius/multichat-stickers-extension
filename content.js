@@ -43,7 +43,7 @@ async function injectStickerPicker(container) {
     const pickerContainer = document.createElement('div')
     pickerContainer.id = 'misaka-sticker-picker'
 
-    const response = await fetch('https://misakamibot.ru/api/multichat/stickers')
+    const response = await fetch('https://api.misakamibot.ru/multichat/stickers')
     stickers = await response.json()
 
     if (stickers.length == 0) {
