@@ -43,8 +43,12 @@ async function injectStickerPicker(container) {
     const pickerContainer = document.createElement('div')
     pickerContainer.id = 'misaka-sticker-picker'
 
-    const response = await fetch('https://api.misakamibot.ru/multichat/stickers')
-    stickers = await response.json()
+    try {
+        const response = await fetch('https://api.misakamibot.ru/multichat/stickers')
+        stickers = await response.json()
+    } catch {
+        stickers = []
+    }
 
     if (stickers.length == 0) {
         pickerContainer.innerHTML = '<div style="text-align:center; padding:40px 0;">Пусто</div>'
