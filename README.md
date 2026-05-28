@@ -1,5 +1,5 @@
 # multichat-stickers-extension
-A Chrome extension that adds multichat stickers to YouTube and Twitch chat.
+A Chrome extension that adds [multichat](https://misakamibot.ru/multichat) stickers to YouTube and Twitch chat.
 
 ![](https://misakamibot.ru/multichat/imgs/extension-demo.png)
 
