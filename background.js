@@ -1,20 +1,71 @@
-chrome.runtime.onMessage.addListener(async (message, sender) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    const currentTabId = sender.tab?.id
+
     if (message.action === "sendYoutubeChatMessage") {
-        await chrome.scripting.executeScript({
-            target: { tabId: sender.tab?.id },
-            world: "MAIN",
-            func: sendYoutubeChatMessage,
-            args: message.args
-        })
+        if (!currentTabId) {
+            return false
+        }
+
+        (async () => {
+            await chrome.scripting.executeScript({
+                target: { tabId: currentTabId },
+                world: "MAIN",
+                func: sendYoutubeChatMessage,
+                args: message.args
+            })
+        })()
+
+        return false
+    }
+
+    if (message.action === "sendTwitchChatMessage") {
+        if (!currentTabId) {
+            return false
+        }
+
+        (async () => {
+            await chrome.scripting.executeScript({
+                target: { tabId: currentTabId },
+                world: "MAIN",
+                func: sendTwitchChatMessage,
+                args: message.args
+            })
+        })()
+
+        return false
+    }
+
+    if (message.action === "checkUpdate") {
+        (async () => {
+            try {
+                const { status } = await chrome.runtime.requestUpdateCheck()
+
+                if (status === "update_available") {
+                    sendResponse(true)
+                } else {
+                    sendResponse(false)
+                }
+            } catch (error) {
+                console.error(error)
+                sendResponse(false)
+            }
+        })()
+
         return true
-    } else if (message.action === "sendTwitchChatMessage") {
-        await chrome.scripting.executeScript({
-            target: { tabId: sender.tab?.id },
-            world: "MAIN",
-            func: sendTwitchChatMessage,
-            args: message.args
-        })
-        return true
+    }
+
+    if (message.action === "forceReload") {
+        if (currentTabId) {
+            chrome.tabs.reload(currentTabId, {}, () => {
+                setTimeout(() => {
+                    chrome.runtime.reload()
+                }, 150)
+            })
+        } else {
+            chrome.runtime.reload()
+        }
+
+        return false
     }
 })
 

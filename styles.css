@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap');
-
 #misaka-sticker-btn {
     margin-left: 8px;
     width: 36px;
@@ -11,59 +9,286 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    anchor-name: --misaka-btn;
 }
 
 #misaka-sticker-picker {
     display: none;
     position: absolute;
-    inset: auto 10px 60px auto;
-    width: 375px;
-    height: 240px;
+    position-anchor: --misaka-btn;
+    bottom: calc(anchor(top) + 15px);
+    width: 465px;
+    height: 450px;
     background: #222;
     border: 1px solid #444;
     border-radius: 8px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
     z-index: 10000;
     color: white;
-    padding: 12px;
     overflow-y: auto;
 }
 
+#misaka-sticker-picker.yt {
+    right: calc(anchor(right) - 50px);
+}
+
+#misaka-sticker-picker.tw {
+    right: calc(anchor(right) - 30px);
+}
+
+.misaka-picker-tab-controls {
+    display: flex;
+    justify-content: center;
+}
+
+.misaka-sticker-picker-tab-header {
+    position: sticky;
+    top: 0;
+    display: block;
+    z-index: 100;
+    background: #222;
+    padding: 10px 0px 0px 0px;
+}
+
+.misaka-sticker-picker-tab-pane {
+    display: none;
+}
+
+.misaka-sticker-picker-tab-pane.active {
+    display: flex;
+    justify-content: center;
+    padding-top: 5px;
+}
+
+.misaka-sticker-picker-tab-btn, .misaka-sticker-picker-tab-action-btn {
+    margin: 0;
+    padding: 10px 20px;
+    cursor: pointer;
+    background: #222;
+    border: none;
+    border-bottom: transparent solid 3px;
+    outline: none;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI Adjusted", "Segoe UI", "Liberation Sans", "Noto Color Emoji", sans-serif;
+}
+
+.misaka-sticker-picker-tab-btn:hover, .misaka-sticker-picker-tab-action-btn:hover {
+    background: #444444;
+}
+
+.misaka-sticker-picker-tab-btn.active {
+    border-bottom-color: #007bff;
+}
+
+.misaka-sticker-picker-tab-action-btn {
+    display: none;
+    position: absolute;
+    right: 0;
+    color: white;
+}
+
+.misaka-sticker-picker-tab-action-btn.left {
+    right: unset;
+    left: 0;
+}
+
+.misaka-sticker-picker-tab-action-btn.active {
+    display: block;
+}
+
 .misaka-sticker-sticker {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    margin: 10px;
+    margin: 1px;
     background-color: #222;
     border: 1px solid #444;
     border-radius: 6px;
     cursor: pointer;
 }
 
+.hidden {
+    display: none!important;
+}
+
 .misaka-sticker-sticker,
 .misaka-sticker-sticker img,
-.misaka-sticker-sticker video,
-.misaka-sticker-sticker tgs-player canvas {
-    width: 90px;
+.misaka-sticker-sticker video {
+    width: 80px;
     text-align: center;
 }
 
-.misaka-stiker-list {
+iframe {
+    pointer-events: none;
+}
+
+#message.yt-live-chat-text-message-renderer .misaka-sticker-sticker,
+.text-fragment[data-a-target="chat-message-text"] .misaka-sticker-sticker {
+    background: unset;
+    border: unset;
+}
+
+#message.yt-live-chat-text-message-renderer .misaka-sticker-sticker,
+#message.yt-live-chat-text-message-renderer .misaka-sticker-sticker img,
+#message.yt-live-chat-text-message-renderer .misaka-sticker-sticker video,
+#message.yt-live-chat-text-message-renderer .misaka-sticker-sticker tgs-player canvas,
+.text-fragment[data-a-target="chat-message-text"] .misaka-sticker-sticker,
+.text-fragment[data-a-target="chat-message-text"] .misaka-sticker-sticker img,
+.text-fragment[data-a-target="chat-message-text"] .misaka-sticker-sticker video,
+.text-fragment[data-a-target="chat-message-text"] .misaka-sticker-sticker tgs-player canvas {
+    width: 130px;
+    text-align: center;
+}
+
+.misaka-sticker-list {
     display: flex;
     flex-wrap: wrap;
-    width: 100%;
-    justify-content: center;
+    justify-content: start;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI Adjusted", "Segoe UI", "Liberation Sans", "Noto Color Emoji", sans-serif;
 }
 
-.misaka-extension-update {
+#misaka-sticker-picker.yt .misaka-sticker-list {
+    width: calc((84px) * 5);
+}
+
+#misaka-sticker-picker.tw .misaka-sticker-list {
+    width: calc((82px) * 5);
+}
+
+.misaka-sticker-list .misaka-sticker-sticker {
+    z-index: 50;
+}
+
+.misaka-sticker-list-empty {
+    text-align: center;
+    padding: 40px 0;
+}
+
+#misaka-extension-update {
     display: block;
     text-align: center;
     padding: 15px 0;
+    margin: auto;
     background-color: #1988e2;
     border: 1px solid #444;
     border-radius: 8px;
     text-decoration: none;
     color: rgba(255, 255, 255);
+    cursor: pointer;
+    width: 90%;
+}
+
+#misaka-extension-update:hover {
+    background-color: #1675c4;
+}
+
+#misaka-search-input {
+    border: 2px solid transparent;
+    height: 2.5em;
+    padding-right: 30px;
+    padding-left: 0.8em;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    outline: none;
+    overflow: hidden;
+    background-color: #292929;
+    border-radius: 10px;
+    transition: all 0.5s;
+    line-height: 3.5em;
+    color: #f5f5f5;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI Adjusted", "Segoe UI", "Liberation Sans", "Noto Color Emoji", sans-serif;
+}
+
+#misaka-sticker-picker.yt #misaka-search-input {
+    width: 375px !important;
+}
+
+#misaka-sticker-picker.tw #misaka-search-input {
+    width: 92% !important;
+}
+
+input.misaka-input[type="text"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    color: red;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-x' viewBox='0 0 16 16'%3E%3Cpath d='M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708'/%3E%3C/svg%3E");
+    background-size: contain;
+    cursor: pointer;
+    color: #f5f5f5;
+}
+
+#misaka-search-input:hover,
+#misaka-search-input:focus {
+    border: 2px solid #4A9DEC;
+    background-color: #292929;
+    color: #f5f5f5;
+}
+
+.misaka-search-wrapper {
+    position: relative;
+    display: none;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.misaka-search-wrapper.active {
+    display: flex;
+}
+
+.misaka-clear-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 0;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    display: none;
+    color: #999;
+}
+
+.misaka-clear-btn:hover {
+    color: #ff4a4a;
+}
+
+#misaka-sticker-picker.yt .misaka-clear-btn {
+    left: 89%;
+}
+
+#misaka-sticker-picker.tw .misaka-clear-btn {
+    left: 90%;
+}
+
+.misaka-clear-btn svg {
+    width: 100%;
+    height: 100%;
+}
+
+.misaka-sticker-favorite-btn {
+    display: none;
+    position: absolute;
+    color: rgb(97, 97, 97);
+    background: white;
+    width: 15px;
+    height: 15px;
+    text-align: center;
+    line-height: 15px;
+    border-radius: 15%;
+    z-index: 55;
+    right: 3px;
+    top: 3px;
+}
+
+.misaka-sticker-favorite-btn.active {
+    color: gold;
+}
+
+.misaka-sticker-list .misaka-sticker-sticker:hover > .misaka-sticker-favorite-btn {
+    display: block;
 }
