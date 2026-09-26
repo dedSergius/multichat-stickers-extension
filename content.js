@@ -101,7 +101,7 @@ async function injectStickerContainer() {
     stickerContainer.id = 'misaka-sticker-container'
 
     if (url.includes('youtube.com')) {
-        emojiPicker.parentElement.insertBefore(stickerContainer, emojiPicker)
+        emojiPicker.closest('#input-container').insertBefore(stickerContainer, emojiPicker)
     } else if (url.includes('twitch.tv')) {
         emojiPicker.parentElement.parentElement.parentElement.insertBefore(stickerContainer, emojiPicker.parentElement.parentElement)
         emojiPicker.parentElement.parentElement.parentElement.style.display = 'flex'
@@ -332,8 +332,8 @@ function getStickerNode(container, sticker, desc = true, highlight = '', isFav =
     if (sticker.ext == 'webm') {
         html += `${favBtn}<video autoplay loop playsinline muted><source src="${url}" type="video/webm" /></video>${desc ? `<p>${tag}</p>` : ''}`
     } else if (sticker.ext == 'tgs') {
-        const iframeUrl = chrome.runtime.getURL(`tgs-sticker.html?src=${url}`)
-        html += `${favBtn}<iframe src="${iframeUrl}"></iframe>${desc ? `<p>${tag}</p>` : ''}`
+        const iframeUrl = chrome.runtime.getURL(`tgs-sticker.html?src=${url}${desc == false ? '&isMes=1' : ''}`)
+        html += `${favBtn}<iframe class="misaka-sticker-frame" src="${iframeUrl}"></iframe>${desc ? `<p>${tag}</p>` : ''}`
     } else {
         html += `${favBtn}<img src="${url}" alt="${sticker.originalTag}">${desc ? `<p>${tag}</p>` : ''}`
     }
@@ -407,6 +407,8 @@ async function updateStickerList() {
     } catch (error) { 
         console.error('Error retrieving sticker list', error)
     }
+    await removeOutdatedStickersFromHistory()
+    await removeOutdatedStickersFromFavorite()
 }
 
 async function getStickerById(id) {
@@ -536,8 +538,6 @@ async function start() {
             }, 1000 * 60 * 5)
         }
         await updateStickerList()
-        await removeOutdatedStickersFromHistory()
-        await removeOutdatedStickersFromFavorite()
         observer = new MutationObserver(async () => {
             if ((document.querySelector('#emoji-picker-button') || document.querySelector('[data-a-target="emote-picker-button"]')) && !document.getElementById('misaka-sticker-container')) {
                 await injectStickerContainer()
@@ -550,8 +550,8 @@ async function start() {
             }
             await renderStickerInMessages(messages)
         })
-        observer.observe(document.body, { childList: true, subtree: true })
         await injectStickerContainer()
+        observer.observe(document.body, { childList: true, subtree: true })
     }
 }
 
@@ -566,12 +566,12 @@ document.addEventListener('click', (e) => {
 })
 
 if (window.navigation) {
-    window.navigation.addEventListener('navigate', async () => {
+    window.navigation.addEventListener('navigate', async (e) => {
+        url = e.destination.url
         if (observer !== undefined) {
             observer.disconnect()
         }
         await start()
-        url = window.location.href
     })
 }
 
